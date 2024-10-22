@@ -1,0 +1,31 @@
+# Archivos generados por NetBeans
+Duck_Hunt/nbproject/private/
+Duck_Hunt/nbbuild/
+Duck_Hunt/build/
+Duck_Hunt/dist/
+
+#Pruevas de codigo
+Duck_Hunt/src/test/
+
+# Archivos de logs y temporales
+*.log
+*.tmp
+
+# Archivos binarios
+*.class
+*.jar
+*.war
+
+# Archivos específicos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de configuración del entorno
+*.iml
+*.ipr
+*.iws
+
+# Archivos generados por compilaciones
+*.o
+*.so
+*.exe
