@@ -3,9 +3,16 @@ package view;
 import java.awt.Graphics;
 import java.awt.HeadlessException;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 /**
  *
@@ -42,6 +49,64 @@ public class VentanaPrincipal extends JFrame
                 g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
             }
         };
+        
+        Perro perro = new Perro(fondo, "clue.png");
+        Thread hilo = new Thread(perro);
+        hilo.start();
+        
+        fondo.add(perro);
+        
+    }
+}
+
+
+class Perro extends JLabel implements Runnable
+{
+    public int posX = 0;
+    public int posY = 400;
+    private final String PATH = "src/sources/"; 
+    private final String img;
+    private final JComponent padre;
+    public Perro(JComponent padre, String img)
+    {
+        this.img = img;
+        this.padre = padre;
+        setIcon(new ImageIcon(PATH + img));
+        setBounds(posX, posY, getWidth(), getHeight());
+        addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                System.out.println("Hola, come frutas y verduras ... xD");
+            }
+            
+        });
     }
 
+    
+    @Override
+    public void run()
+    {
+        while(true)
+        {
+            if (posX == 650)
+            {
+                posX = 0;
+            }else
+            {
+                posX++;
+            }
+            try
+            {
+                setBounds(posX, posY, getWidth(), getHeight());
+                Thread.sleep(9);
+                padre.repaint();
+            } catch (InterruptedException ex)
+            {
+                System.out.println(ex);
+            }
+        }
+    }
+    
 }
