@@ -22,13 +22,14 @@ public class VentanaPrincipal extends JFrame
 {
 
     private JPanel fondo;
-
+    private Image imagen;
     public VentanaPrincipal() throws HeadlessException
     {
-        setLocationRelativeTo(null);
+        setLocation(0, 0);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(900, 650);
+        setResizable(false);
         initComponents();
+        setSize(imagen.getWidth(rootPane), imagen.getHeight(rootPane));
     }
 
     private void initComponents()
@@ -39,7 +40,7 @@ public class VentanaPrincipal extends JFrame
 
     private void initFondo()
     {
-        Image imagen = new ImageIcon("src/sources/world.png").getImage();
+        imagen = new ImageIcon("src/sources/world.png").getImage();
         fondo = new JPanel()
         {
             @Override
@@ -63,7 +64,7 @@ public class VentanaPrincipal extends JFrame
 class Perro extends JLabel implements Runnable
 {
     public int posX = 0;
-    public int posY = 400;
+    public int posY = 270;
     private final String PATH = "src/sources/"; 
     private final String img;
     private final JComponent padre;
@@ -90,7 +91,7 @@ class Perro extends JLabel implements Runnable
     {
         while(true)
         {
-            if (posX == 650)
+            if (posX == 450)
             {
                 posX = 0;
             }else
