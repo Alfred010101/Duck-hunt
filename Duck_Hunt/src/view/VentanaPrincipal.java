@@ -3,6 +3,9 @@ package view;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.util.Queue;
+import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,9 +22,9 @@ public class VentanaPrincipal extends JFrame implements Runnable
 
     private JLayeredPane layeredPane;
     private Image imagen;
-    private Queue<Pato> patos;
-
-    public VentanaPrincipal(Queue<Pato> patos)
+//    private Queue<Pato> patos;
+    private final int patos;
+    public VentanaPrincipal(int patos)
     {
         this.patos = patos;
         setLocation(200, 400);
@@ -59,20 +62,38 @@ public class VentanaPrincipal extends JFrame implements Runnable
         Perro perro = new Perro(layeredPane);
         layeredPane.add(perro, Integer.valueOf(5));
         
-        Pato pato1 = new Pato("azul", 120);
-        Pato pato2 = new Pato("negro", 80);
-        Pato pato3 = new Pato("azul", 95);
-        layeredPane.add(pato1,Integer.valueOf(1));
-        layeredPane.add(pato2,Integer.valueOf(1));
-        layeredPane.add(pato3,Integer.valueOf(1));
+//        Pato pato1 = new Pato("azul", 120);
+//        Pato pato2 = new Pato("negro", 80);
+//        Pato pato3 = new Pato("azul", 95);
+//        layeredPane.add(pato1,Integer.valueOf(1));
+//        layeredPane.add(pato2,Integer.valueOf(1));
+//        layeredPane.add(pato3,Integer.valueOf(1));
 
         perro.intro();
         
-        Thread hiloPato1 = new Thread(pato1);
-        Thread hiloPato2 = new Thread(pato2);
-        Thread hiloPato3 = new Thread(pato3);
-        hiloPato1.start();
-        hiloPato2.start();
-        hiloPato3.start();
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+        
+        for (int i = 0; i < patos; i++)
+        {
+            String color = switch(new Random().nextInt(3))
+            {
+                case 0 ->  "azul";
+                case 1 ->  "negro";
+                case 2 ->  "rojo";
+                default -> "negro";                    
+            };
+            Pato pato = new Pato(color, 120);
+            layeredPane.add(pato,Integer.valueOf(1));
+            executor.submit(pato);
+        }
+//        Thread hiloPato1 = new Thread(pato1);
+//        Thread hiloPato2 = new Thread(pato2);
+//        Thread hiloPato3 = new Thread(pato3);
+//        hiloPato1.start();
+//        hiloPato2.start();
+//        hiloPato3.start();
+        executor.shutdown();
+//        while (!executor.isTerminated()){}
+        System.out.println("AAA");
     }
 }

@@ -15,19 +15,19 @@ public class App
 
     public static void main(String[] args)
     {
-//        String input = JOptionPane.showInputDialog(null, "Ingrese el numero de patos", "INPUT", JOptionPane.QUESTION_MESSAGE);
-        String input = "5";
+        String input = JOptionPane.showInputDialog(null, "Ingrese el numero de patos", "INPUT", JOptionPane.QUESTION_MESSAGE);
+//        String input = "5";
         if (input != null)
         {
             try
             {
                 int noPatos = Integer.parseInt(input);
-                Queue<Pato> patos = new LinkedList<>();
+//                Queue<Pato> patos = new LinkedList<>();
 //                for (int i = 0; i < noPatos; i++)
 //                {
 //                    patos.add(null);
 //                }
-                new Thread(new VentanaPrincipal(patos)).start();
+                new Thread(new VentanaPrincipal(noPatos)).start();
             } catch (NumberFormatException e)
             {
                 JOptionPane.showMessageDialog(null, "El dato introducido no es valido", "Error de datos de entrada", JOptionPane.ERROR_MESSAGE);
