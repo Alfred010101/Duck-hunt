@@ -1,5 +1,6 @@
 package model;
 
+import controller.Contador;
 import controller.TrayectoriaVuelo;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
@@ -24,13 +25,15 @@ public class Pato extends JLabel implements Runnable
     private boolean morido = false;
     private final int delay;
     private final CyclicBarrier barrier;
-
-    public Pato(CyclicBarrier barrier, String color, int delay, int trayectoria)
+    private final Contador contador;
+    
+    public Pato(CyclicBarrier barrier, String color, int delay, int trayectoria, Contador contador)
     {
         PATH = "src/sources/patos/" + color + "/";
         TRAYECTORIA = new TrayectoriaVuelo(trayectoria);
         this.delay = delay;
         this.barrier = barrier;
+        this.contador = contador;
 
         addMouseListener(new MouseAdapter()
         {
@@ -40,7 +43,6 @@ public class Pato extends JLabel implements Runnable
 //                System.out.println("Hola, come frutas y verduras ... xD");
                 if (!morido)
                 {
-                    System.out.println("+100");
                     morido = !morido;
                 }
             }
@@ -63,6 +65,8 @@ public class Pato extends JLabel implements Runnable
 
                 if (morido)
                 {
+                    contador.setMoridos();
+                    contador.setPuntaje(100);
                     if (TRAYECTORIA.getCoordenadas().get(0).x < TRAYECTORIA.getCoordenadas().get(TRAYECTORIA.getCoordenadas().size() - 1).x)
                     {
                         imagen = new ImageIcon(PATH + "scaredRight.png");

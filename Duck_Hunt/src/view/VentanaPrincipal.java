@@ -1,5 +1,6 @@
 package view;
 
+import controller.Contador;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.util.Queue;
@@ -30,7 +31,7 @@ public class VentanaPrincipal extends JFrame implements Runnable
     {
         this.patos = patos;
         setLocation(200, 400);
-//        setLocationRelativeTo(null);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        setResizable(false);
         setVisible(true);
@@ -61,6 +62,8 @@ public class VentanaPrincipal extends JFrame implements Runnable
     @Override
     public void run()
     {
+        Contador contador = new Contador();
+        
         Perro perro = new Perro(layeredPane);
         layeredPane.add(perro, Integer.valueOf(5));
 
@@ -91,7 +94,15 @@ public class VentanaPrincipal extends JFrame implements Runnable
 
             CyclicBarrier barrier = new CyclicBarrier(tasksInGroup , () ->
             {
-                System.out.println("Fin del grupo");
+                if(contador.getMoridos() > 0)
+                {
+                    perro.atrapar(contador.getMoridos());
+                    contador.resetMoridos();
+                }else
+                {
+                    perro.troll();
+                }
+                System.out.println(contador.getPuntaje());
             });
             
             for (int j = 0; j < tasksInGroup && i < patos; j++, i++)
@@ -113,7 +124,7 @@ public class VentanaPrincipal extends JFrame implements Runnable
                     tmp = rand.nextInt(3);
                 }while(trayectoria == tmp);
                 trayectoria = tmp;
-                Pato pato = new Pato(barrier, color, 120, trayectoria);
+                Pato pato = new Pato(barrier, color, 120, trayectoria, contador);
                 layeredPane.add(pato, Integer.valueOf(1));
                 executor.submit(pato);
                 System.out.println("Pato : " + (i + 1));
