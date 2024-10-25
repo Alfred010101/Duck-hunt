@@ -3,7 +3,6 @@ package controller;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  *
@@ -14,23 +13,20 @@ public class TrayectoriaVuelo
 
     private List<Point> coordenadas;
     private List<String> sprites;
-    private static final Random random = new Random();
-    private int rand;
+    private final int trayectoria;
 
-    public TrayectoriaVuelo()
+    public TrayectoriaVuelo(int trayectoria)
     {
         this.coordenadas = new ArrayList<>();
         this.sprites = new ArrayList<>();
+        this.trayectoria = trayectoria;
         setCordenadas();
         setSprites();
     }
 
     private void setCordenadas()
     {
-        rand = random.nextInt(3);
-//        rand = 3;
-        System.out.println(rand);
-        coordenadas = switch (rand)
+        coordenadas = switch (trayectoria)
         {
             case 0 ->
                 List.of(
@@ -155,7 +151,7 @@ public class TrayectoriaVuelo
 
     private void setSprites()
     {
-        sprites = switch (rand)
+        sprites = switch (trayectoria)
         {
             case 0, 1 ->
                 List.of(
@@ -261,8 +257,6 @@ public class TrayectoriaVuelo
                 "duckleft1.png",
                 "duckleft2.png"
                 );
-//            default ->
-//                List.of();
         };
     }
 
