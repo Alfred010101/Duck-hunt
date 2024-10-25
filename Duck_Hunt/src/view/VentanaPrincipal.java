@@ -27,7 +27,7 @@ public class VentanaPrincipal extends JFrame implements Runnable
         setLocation(200, 400);
 //        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
+//        setResizable(false);
         setVisible(true);
         setSize(525, 480);
         initComponents();
@@ -59,9 +59,9 @@ public class VentanaPrincipal extends JFrame implements Runnable
         Perro perro = new Perro(layeredPane);
         layeredPane.add(perro, Integer.valueOf(5));
         
-        Pato pato1 = new Pato("negro", 490);
-        Pato pato2 = new Pato("rojo", 335);
-        Pato pato3 = new Pato("azul", 1200);
+        Pato pato1 = new Pato("azul", 120);
+        Pato pato2 = new Pato("negro", 80);
+        Pato pato3 = new Pato("azul", 95);
         layeredPane.add(pato1,Integer.valueOf(1));
         layeredPane.add(pato2,Integer.valueOf(1));
         layeredPane.add(pato3,Integer.valueOf(1));

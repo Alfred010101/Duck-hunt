@@ -1,4 +1,4 @@
-package model;
+package controller;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -9,12 +9,13 @@ import java.util.Random;
  *
  * @author Alfred
  */
-class TrayectoriaVuelo
+public class TrayectoriaVuelo
 {
 
-    private final List<Point> coordenadas;
-    private final List<String> sprites;
-    private final Random random = new Random();
+    private List<Point> coordenadas;
+    private List<String> sprites;
+    private static final Random random = new Random();
+    private int rand;
 
     public TrayectoriaVuelo()
     {
@@ -26,24 +27,125 @@ class TrayectoriaVuelo
 
     private void setCordenadas()
     {
-        coordenadas.add(new Point(0, 100));
-        coordenadas.add(new Point(30, 80));
-        coordenadas.add(new Point(60, 100));
-        coordenadas.add(new Point(90, 80));
-        coordenadas.add(new Point(120, 100));
-        coordenadas.add(new Point(150, 80));
-        coordenadas.add(new Point(180, 100));
-        coordenadas.add(new Point(210, 80));
-        coordenadas.add(new Point(240, 100));
-        coordenadas.add(new Point(270, 80));
-        coordenadas.add(new Point(300, 100));
-        coordenadas.add(new Point(330, 80));
-        coordenadas.add(new Point(360, 100));
-        coordenadas.add(new Point(390, 80));
-        coordenadas.add(new Point(420, 100));
-        coordenadas.add(new Point(450, 80));
-        coordenadas.add(new Point(480, 100));
-        coordenadas.add(new Point(510, 80));
+        rand = random.nextInt(3);
+//        rand = 3;
+        System.out.println(rand);
+        coordenadas = switch (rand)
+        {
+            case 0 ->
+                List.of(
+                new Point(0, 100),
+                new Point(15, 90),
+                new Point(30, 80),
+                new Point(45, 90),
+                new Point(60, 100),
+                new Point(75, 90),
+                new Point(90, 80),
+                new Point(105, 90),
+                new Point(120, 100),
+                new Point(135, 90),
+                new Point(150, 80),
+                new Point(165, 90),
+                new Point(180, 100),
+                new Point(195, 90),
+                new Point(210, 80),
+                new Point(225, 90),
+                new Point(240, 100),
+                new Point(255, 90),
+                new Point(270, 80),
+                new Point(285, 90),
+                new Point(300, 100),
+                new Point(315, 90),
+                new Point(330, 80),
+                new Point(345, 90),
+                new Point(360, 100),
+                new Point(375, 90),
+                new Point(390, 80),
+                new Point(405, 90),
+                new Point(420, 100),
+                new Point(435, 90),
+                new Point(450, 80),
+                new Point(465, 90),
+                new Point(480, 100),
+                new Point(495, 90),
+                new Point(510, 80)
+                );
+
+            case 1 ->
+                List.of(
+                new Point(0, 260),
+                new Point(12, 250),
+                new Point(24, 240),
+                new Point(36, 230),
+                new Point(48, 220),
+                new Point(60, 210),
+                new Point(60, 200),
+                new Point(96, 190),
+                new Point(108, 180),
+                new Point(120, 170),
+                new Point(132, 160),
+                new Point(144, 150),
+                new Point(156, 140),
+                new Point(168, 130),
+                new Point(180, 120),
+                new Point(192, 110),
+                new Point(204, 100),
+                new Point(216, 90),
+                new Point(228, 80),
+                new Point(240, 70),
+                new Point(252, 60),
+                new Point(264, 50),
+                new Point(276, 40),
+                new Point(288, 30),
+                new Point(300, 20),
+                new Point(312, 10),
+                new Point(324, 0),
+                new Point(336, -10),
+                new Point(348, -20),
+                new Point(360, -25),
+                new Point(372, -30),
+                new Point(384, -35),
+                new Point(396, -40),
+                new Point(405, -60)
+                );
+
+            case 2 ->
+                List.of(
+                new Point(500, 80),
+                new Point(480, 75),
+                new Point(460, 70),
+                new Point(440, 80),
+                new Point(420, 90),
+                new Point(400, 75),
+                new Point(380, 70),
+                new Point(360, 75),
+                new Point(340, 80),
+                new Point(320, 70),
+                new Point(300, 75),
+                new Point(280, 70),
+                new Point(260, 65),
+                new Point(240, 80),
+                new Point(220, 70),
+                new Point(200, 75),
+                new Point(180, 80),
+                new Point(160, 70),
+                new Point(140, 75),
+                new Point(120, 85),
+                new Point(100, 80),
+                new Point(80, 75),
+                new Point(60, 70),
+                new Point(40, 75),
+                new Point(20, 80),
+                new Point(0, 75),
+                new Point(-20, 70),
+                new Point(-40, 75),
+                new Point(-60, 80),
+                new Point(-70, 85)
+                );
+           
+            default ->
+                List.of();
+        };
     }
 
     public List<Point> getCoordenadas()
@@ -53,33 +155,121 @@ class TrayectoriaVuelo
 
     private void setSprites()
     {
-        sprites.add("duckright1.png");
-        sprites.add("duckright2.png");
-        sprites.add("duckright3.png");
-        sprites.add("duckright4.png");
-        sprites.add("duckright1.png");
-        sprites.add("duckright2.png");
-        sprites.add("duckright3.png");
-        sprites.add("duckright4.png");
-        sprites.add("duckright1.png");
-        sprites.add("duckright2.png");
-        sprites.add("duckright3.png");
-        sprites.add("duckright4.png");
-        sprites.add("duckright1.png");
-        sprites.add("duckright2.png");
-        sprites.add("duckright3.png");
-        sprites.add("duckright4.png");
-        sprites.add("duckright1.png");
-        sprites.add("duckright2.png");
+        sprites = switch (rand)
+        {
+            case 0, 1 ->
+                List.of(
+                "duckright1.png",
+                "duckright2.png",
+                "duckright3.png",
+                "duckright4.png",
+                "duckright1.png",
+                "duckright2.png",
+                "duckright3.png",
+                "duckright4.png",
+                "duckright1.png",
+                "duckright2.png",
+                "duckright3.png",
+                "duckright4.png",
+                "duckright1.png",
+                "duckright2.png",
+                "duckright3.png",
+                "duckright4.png",
+                "duckright1.png",
+                "duckright2.png",
+                "duckright3.png",
+                "duckright4.png",
+                "duckright1.png",
+                "duckright2.png",
+                "duckright3.png",
+                "duckright4.png",
+                "duckright1.png",
+                "duckright2.png",
+                "duckright3.png",
+                "duckright4.png",
+                "duckright1.png",
+                "duckright2.png",
+                "duckright3.png",
+                "duckright4.png",
+                "duckright1.png",
+                "duckright2.png",
+                "duckright3.png"
+                );
+            case 2 ->
+                List.of(
+                "duckleft1.png",
+                "duckleft2.png",
+                "duckleft3.png",
+                "duckleft4.png",
+                "duckleft1.png",
+                "duckleft2.png",
+                "duckleft3.png",
+                "duckleft4.png",
+                "duckleft1.png",
+                "duckleft2.png",
+                "duckleft3.png",
+                "duckleft4.png",
+                "duckleft1.png",
+                "duckleft2.png",
+                "duckleft3.png",
+                "duckleft4.png",
+                "duckleft1.png",
+                "duckleft2.png",
+                "duckleft3.png",
+                "duckleft4.png",
+                "duckleft1.png",
+                "duckleft2.png",
+                "duckleft3.png",
+                "duckleft4.png",
+                "duckleft1.png",
+                "duckleft2.png",
+                "duckleft3.png",
+                "duckleft4.png",
+                "duckleft1.png",
+                "duckleft2.png"
+                );
+            default ->
+                List.of(
+                "duckleft1.png",
+                "duckleft2.png",
+                "duckleft3.png",
+                "duckleft4.png",
+                "duckleft1.png",
+                "duckleft2.png",
+                "duckleft3.png",
+                "duckleft4.png",
+                "duckleft1.png",
+                "duckleft2.png",
+                "duckleft3.png",
+                "duckleft4.png",
+                "duckleft1.png",
+                "duckleft2.png",
+                "duckleft3.png",
+                "duckleft4.png",
+                "duckleft1.png",
+                "duckleft2.png",
+                "duckleft3.png",
+                "duckleft4.png",
+                "duckleft1.png",
+                "duckleft2.png",
+                "duckleft3.png",
+                "duckleft4.png",
+                "duckleft1.png",
+                "duckleft2.png",
+                "duckleft3.png",
+                "duckleft4.png",
+                "duckleft1.png",
+                "duckleft2.png"
+                );
+//            default ->
+//                List.of();
+        };
     }
 
     public List<String> getSprites()
     {
         return sprites;
     }
-
-    private void generarCoordenadas(int puntos)
-    {
 
 //            coordenadas.add(new Point(0, 260));
 //            coordenadas.add(new Point(20, 250));
@@ -629,16 +819,36 @@ class TrayectoriaVuelo
 //coordenadas.add(new Point(340, 240));
 //
 //// Trayectoria 35: Subida y Bajada en Línea Recta
-        coordenadas.add(new Point(0, 300));
-        coordenadas.add(new Point(30, 280));
-        coordenadas.add(new Point(60, 300));
-        coordenadas.add(new Point(90, 280));
-        coordenadas.add(new Point(120, 300));
-        coordenadas.add(new Point(150, 280));
-        coordenadas.add(new Point(180, 300));
-        coordenadas.add(new Point(210, 280));
-        coordenadas.add(new Point(240, 300));
-        coordenadas.add(new Point(270, 280));
+//    coordenadas.add (
+//
+//    new Point(0, 300));
+//    coordenadas.add (
+//
+//    new Point(30, 280));
+//    coordenadas.add (
+//
+//    new Point(60, 300));
+//    coordenadas.add (
+//
+//    new Point(90, 280));
+//    coordenadas.add (
+//
+//    new Point(120, 300));
+//    coordenadas.add (
+//
+//    new Point(150, 280));
+//    coordenadas.add (
+//
+//    new Point(180, 300));
+//    coordenadas.add (
+//
+//    new Point(210, 280));
+//    coordenadas.add (
+//
+//    new Point(240, 300));
+//    coordenadas.add (
+//
+//new Point(270, 280));
 //
 //// Trayectoria 36: Movimiento Aleatorio Corto
 //coordenadas.add(new Point(250, 200));
@@ -1387,7 +1597,6 @@ class TrayectoriaVuelo
 //coordenadas.add(new Point(700, 700));
 //coordenadas.add(new Point(800, 800));
 //coordenadas.add(new Point(900, 900));
-
 // Trayectoria 100: Movimiento en Línea Recta
 //coordenadas.add(new Point(250, 500));
 //coordenadas.add(new Point(250, 450));
@@ -1399,6 +1608,4 @@ class TrayectoriaVuelo
 //coordenadas.add(new Point(250, 150));
 //coordenadas.add(new Point(250, 100));
 //coordenadas.add(new Point(250, 50));
-    }
-
 }

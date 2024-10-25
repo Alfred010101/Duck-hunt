@@ -1,5 +1,6 @@
 package model;
 
+import controller.TrayectoriaVuelo;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -34,8 +35,8 @@ public class Pato extends JLabel implements Runnable
                 if (!morido)
                 {
                     System.out.println("+100");
+                    morido = !morido;
                 }                
-                morido = !morido;
             }
         });
     }
