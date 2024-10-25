@@ -1,9 +1,14 @@
 package model;
 
+import controller.Contador;
 import controller.TrayectoriaVuelo;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -19,12 +24,16 @@ public class Pato extends JLabel implements Runnable
     private final TrayectoriaVuelo TRAYECTORIA;
     private boolean morido = false;
     private final int delay;
-
-    public Pato(String color, int delay)
+    private final CyclicBarrier barrier;
+    private final Contador contador;
+    
+    public Pato(CyclicBarrier barrier, String color, int delay, int trayectoria, Contador contador)
     {
         PATH = "src/sources/patos/" + color + "/";
-        TRAYECTORIA = new TrayectoriaVuelo();
+        TRAYECTORIA = new TrayectoriaVuelo(trayectoria);
         this.delay = delay;
+        this.barrier = barrier;
+        this.contador = contador;
 
         addMouseListener(new MouseAdapter()
         {
@@ -34,7 +43,6 @@ public class Pato extends JLabel implements Runnable
 //                System.out.println("Hola, come frutas y verduras ... xD");
                 if (!morido)
                 {
-                    System.out.println("+100");
                     morido = !morido;
                 }
             }
@@ -44,59 +52,53 @@ public class Pato extends JLabel implements Runnable
     @Override
     public void run()
     {
-        for (int i = 0; i < TRAYECTORIA.getCoordenadas().size(); i++)
+        try
         {
-            imagen = new ImageIcon(PATH + TRAYECTORIA.getSprites().get(i));
-            setIcon(imagen);
-            Point punto = TRAYECTORIA.getCoordenadas().get(i);
-            setBounds(punto.x, punto.y, imagen.getIconWidth(), imagen.getIconHeight());
-            try
+            for (int i = 0; i < TRAYECTORIA.getCoordenadas().size(); i++)
             {
-                Thread.sleep(delay);
-            } catch (InterruptedException ex)
-            {
-                System.out.println(ex);
-            }
-            if (morido)
-            {
-                if (TRAYECTORIA.getCoordenadas().get(0).x < TRAYECTORIA.getCoordenadas().get(TRAYECTORIA.getCoordenadas().size() - 1).x)
-                {
-                    imagen = new ImageIcon(PATH + "scaredRight.png");
-                }else
-                {                    
-                    imagen = new ImageIcon(PATH + "scaredLeft.png");
-                }                
+                imagen = new ImageIcon(PATH + TRAYECTORIA.getSprites().get(i));
                 setIcon(imagen);
+                Point punto = TRAYECTORIA.getCoordenadas().get(i);
                 setBounds(punto.x, punto.y, imagen.getIconWidth(), imagen.getIconHeight());
 
-                try
-                {
-                    Thread.sleep(250);
-                } catch (InterruptedException ex)
-                {
-                    System.out.println(ex);
-                }
+                Thread.sleep(delay);
 
-                int a = 1;
-                int posY = punto.y;
-                while (posY < 300)
+                if (morido)
                 {
-                    imagen = new ImageIcon(PATH + "duckfall" + a + ".png");
-                    setIcon(imagen);
-                    setBounds(punto.x, posY, imagen.getIconWidth(), imagen.getIconHeight());
-                    posY += 10;
-                    a = (a == 1) ? 2 : 1;
-                    try
+                    contador.setMoridos();
+                    contador.setPuntaje(100);
+                    if (TRAYECTORIA.getCoordenadas().get(0).x < TRAYECTORIA.getCoordenadas().get(TRAYECTORIA.getCoordenadas().size() - 1).x)
                     {
-                        Thread.sleep(40);
-                    } catch (InterruptedException ex)
+                        imagen = new ImageIcon(PATH + "scaredRight.png");
+                    } else
                     {
-                        System.out.println(ex);
+                        imagen = new ImageIcon(PATH + "scaredLeft.png");
                     }
+                    setIcon(imagen);
+                    setBounds(punto.x, punto.y, imagen.getIconWidth(), imagen.getIconHeight());
+
+                    Thread.sleep(250);
+
+                    int a = 1;
+                    int posY = punto.y;
+                    while (posY < 300)
+                    {
+                        imagen = new ImageIcon(PATH + "duckfall" + a + ".png");
+                        setIcon(imagen);
+                        setBounds(punto.x, posY, imagen.getIconWidth(), imagen.getIconHeight());
+                        posY += 10;
+                        a = (a == 1) ? 2 : 1;
+
+                        Thread.sleep(40);
+                    }
+                    setIcon(null);
+                    break;
                 }
-                setIcon(null);
-                break;
             }
+            barrier.await();
+        } catch (InterruptedException | BrokenBarrierException ex)
+        {
+            System.out.println(ex);
         }
     }
 }
