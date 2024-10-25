@@ -1,5 +1,6 @@
 package model;
 
+import controller.TrayectoriaVuelo;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -17,14 +18,14 @@ public class Pato extends JLabel implements Runnable
     private ImageIcon imagen;
     private final TrayectoriaVuelo TRAYECTORIA;
     private boolean morido = false;
-    private int delay;
-    
+    private final int delay;
+
     public Pato(String color, int delay)
     {
         PATH = "src/sources/patos/" + color + "/";
         TRAYECTORIA = new TrayectoriaVuelo();
         this.delay = delay;
-        
+
         addMouseListener(new MouseAdapter()
         {
             @Override
@@ -34,8 +35,8 @@ public class Pato extends JLabel implements Runnable
                 if (!morido)
                 {
                     System.out.println("+100");
-                }                
-                morido = !morido;
+                    morido = !morido;
+                }
             }
         });
     }
@@ -58,6 +59,24 @@ public class Pato extends JLabel implements Runnable
             }
             if (morido)
             {
+                if (TRAYECTORIA.getCoordenadas().get(0).x < TRAYECTORIA.getCoordenadas().get(TRAYECTORIA.getCoordenadas().size() - 1).x)
+                {
+                    imagen = new ImageIcon(PATH + "scaredRight.png");
+                }else
+                {                    
+                    imagen = new ImageIcon(PATH + "scaredLeft.png");
+                }                
+                setIcon(imagen);
+                setBounds(punto.x, punto.y, imagen.getIconWidth(), imagen.getIconHeight());
+
+                try
+                {
+                    Thread.sleep(250);
+                } catch (InterruptedException ex)
+                {
+                    System.out.println(ex);
+                }
+
                 int a = 1;
                 int posY = punto.y;
                 while (posY < 300)

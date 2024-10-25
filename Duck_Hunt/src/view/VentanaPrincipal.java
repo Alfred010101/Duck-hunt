@@ -1,13 +1,12 @@
 package view;
 
-import java.awt.Graphics;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.util.Queue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import model.Pato;
 import model.Perro;
 
@@ -18,74 +17,62 @@ import model.Perro;
 public class VentanaPrincipal extends JFrame implements Runnable
 {
 
-    private JPanel fondo;
+    private JLayeredPane layeredPane;
     private Image imagen;
     private Queue<Pato> patos;
-    
+
     public VentanaPrincipal(Queue<Pato> patos)
     {
         this.patos = patos;
-        setLocation(0, 0);
+        setLocation(200, 400);
+//        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
+//        setResizable(false);
         setVisible(true);
+        setSize(525, 480);
         initComponents();
-        setSize(imagen.getWidth(null), imagen.getHeight(null));
     }
 
     private void initComponents()
     {
-        initFondo();
-        add(fondo);
-    }
+        imagen = new ImageIcon("src/sources/fondo_fondo.png").getImage();
+        layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(525, 480));
+        setContentPane(layeredPane);
+        layeredPane.setLayout(null);
 
-    private void initFondo()
-    {
-        imagen = new ImageIcon("src/sources/world.png").getImage();
-        fondo = new JPanel()
-        {
-            @Override
-            protected void paintComponent(Graphics g)
-            {
-                super.paintComponent(g);
-                g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
-            }
-        };
+        ImageIcon n1 = new ImageIcon("src/sources/fondo_fondo.png");
+        ImageIcon n2 = new ImageIcon("src/sources/world.png");
 
-        fondo.setLayout(null);
+        JLabel lblFondo1 = new JLabel(n1);
+        lblFondo1.setBounds(0, 0, n1.getIconWidth(), n1.getIconHeight());
+
+        JLabel lblFondo2 = new JLabel(n2);
+        lblFondo2.setBounds(0, 0, n2.getIconWidth(), n2.getIconHeight());
+        layeredPane.add(lblFondo1, Integer.valueOf(0));
+        layeredPane.add(lblFondo2,Integer.valueOf(3));
     }
 
     @Override
     public void run()
     {
-        Perro perro = new Perro();
-        Pato pato1 = new Pato("negro", 490);
-        Pato pato2 = new Pato("rojo", 335);
-        Pato pato3 = new Pato("azul", 1200);
-        fondo.add(pato1);
-        fondo.add(pato2);
-        fondo.add(pato3);
-        fondo.add(perro);
+        Perro perro = new Perro(layeredPane);
+        layeredPane.add(perro, Integer.valueOf(5));
+        
+        Pato pato1 = new Pato("azul", 120);
+        Pato pato2 = new Pato("negro", 80);
+        Pato pato3 = new Pato("azul", 95);
+        layeredPane.add(pato1,Integer.valueOf(1));
+        layeredPane.add(pato2,Integer.valueOf(1));
+        layeredPane.add(pato3,Integer.valueOf(1));
+
         perro.intro();
+        
         Thread hiloPato1 = new Thread(pato1);
         Thread hiloPato2 = new Thread(pato2);
         Thread hiloPato3 = new Thread(pato3);
         hiloPato1.start();
-//        try
-//        {
-//            Thread.sleep(700);
-//        } catch (InterruptedException ex)
-//        {
-//            Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-//        }
         hiloPato2.start();
-//        try
-//        {
-//            Thread.sleep(500);
-//        } catch (InterruptedException ex)
-//        {
-//            Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-//        }
         hiloPato3.start();
     }
 }

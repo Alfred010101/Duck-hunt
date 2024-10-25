@@ -15,7 +15,8 @@ public class App
 
     public static void main(String[] args)
     {
-        String input = JOptionPane.showInputDialog(null, "Ingrese el numero de patos", "INPUT", JOptionPane.QUESTION_MESSAGE);
+//        String input = JOptionPane.showInputDialog(null, "Ingrese el numero de patos", "INPUT", JOptionPane.QUESTION_MESSAGE);
+        String input = "5";
         if (input != null)
         {
             try
