@@ -5,10 +5,6 @@ import controller.TrayectoriaVuelo;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -24,16 +20,14 @@ public class Pato extends JLabel implements Runnable
     private final TrayectoriaVuelo TRAYECTORIA;
     private boolean morido = false;
     private final int delay;
-    private final CyclicBarrier barrier;
     private final Contador contador;
-    
-    public Pato(CyclicBarrier barrier, String color, int delay, int trayectoria, Contador contador)
-    {
+
+    public Pato(String color, int delay, int trayectoria, Contador contador)
+    { 
+        this.delay = delay;
+        this.contador = contador;
         PATH = "src/sources/patos/" + color + "/";
         TRAYECTORIA = new TrayectoriaVuelo(trayectoria);
-        this.delay = delay;
-        this.barrier = barrier;
-        this.contador = contador;
 
         addMouseListener(new MouseAdapter()
         {
@@ -95,8 +89,7 @@ public class Pato extends JLabel implements Runnable
                     break;
                 }
             }
-            barrier.await();
-        } catch (InterruptedException | BrokenBarrierException ex)
+        } catch (InterruptedException ex)
         {
             System.out.println(ex);
         }

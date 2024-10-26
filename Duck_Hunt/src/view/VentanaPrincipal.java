@@ -5,13 +5,11 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.util.Queue;
 import java.util.Random;
-import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import model.Pato;
 import model.Perro;
 
@@ -23,17 +21,19 @@ public class VentanaPrincipal extends JFrame implements Runnable
 {
 
     private JLayeredPane layeredPane;
-    private Image imagen;
-//    private Queue<Pato> patos;
-    private final int patos;
+//    private Image imagen;
+    private final Queue<Pato> patos;
+    private final Contador contador;
 
-    public VentanaPrincipal(int patos)
+//    private final int patos;
+    public VentanaPrincipal(Queue<Pato> patos, Contador contador)
     {
         this.patos = patos;
+        this.contador = contador;
         setLocation(200, 400);
-        setLocationRelativeTo(null);
+//        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        setResizable(false);
+        setResizable(false);
         setVisible(true);
         setSize(525, 480);
         initComponents();
@@ -41,7 +41,7 @@ public class VentanaPrincipal extends JFrame implements Runnable
 
     private void initComponents()
     {
-        imagen = new ImageIcon("src/sources/fondo_fondo.png").getImage();
+//        imagen = new ImageIcon("src/sources/fondo_fondo.png").getImage();
         layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(525, 480));
         setContentPane(layeredPane);
@@ -62,81 +62,58 @@ public class VentanaPrincipal extends JFrame implements Runnable
     @Override
     public void run()
     {
-        Contador contador = new Contador();
-        
         Perro perro = new Perro(layeredPane);
         layeredPane.add(perro, Integer.valueOf(5));
 
-//        Pato pato1 = new Pato("azul", 120);
-//        Pato pato2 = new Pato("negro", 80);
-//        Pato pato3 = new Pato("azul", 95);
-//        layeredPane.add(pato1,Integer.valueOf(1));
-//        layeredPane.add(pato2,Integer.valueOf(1));
-//        layeredPane.add(pato3,Integer.valueOf(1));
         perro.intro();
 
-        ExecutorService executor = Executors.newFixedThreadPool(2);
-
         Random rand = new Random();
-        int trayectoria = -1;
-        int tmp;
-        for (int i = 0; i < patos;)
+
+        Thread[] hilosEjucutar = new Thread[2];
+        Pato[] patosEjucutar = new Pato[2];
+        int cont = 0;
+
+        while (!patos.isEmpty())
         {
-            int tasksInGroup;
-            if (i + 1 < patos)
+            int noPatosEjecutar;
+            if (patos.size() > 1)
             {
-                tasksInGroup = ((rand.nextInt(99) + 1) % 2) + 1;
-            }
-            else
+                noPatosEjecutar = ((rand.nextInt(99) + 1) % 2) + 1;
+            } else
             {
-                tasksInGroup = 1;
+                noPatosEjecutar = 1;
             }
 
-            CyclicBarrier barrier = new CyclicBarrier(tasksInGroup , () ->
+            for (int i = 0; i < noPatosEjecutar; i++, cont++)
             {
-                if(contador.getMoridos() > 0)
+                patosEjucutar[i] = patos.poll();
+                hilosEjucutar[i] = new Thread(patosEjucutar[i]);
+                layeredPane.add(patosEjucutar[i], Integer.valueOf(1));
+                hilosEjucutar[i].start();
+            }
+
+            for (int i = 0; i < noPatosEjecutar; i++)
+            {
+                try
                 {
-                    perro.atrapar(contador.getMoridos());
-                    contador.resetMoridos();
-                }else
+                    hilosEjucutar[i].join();
+                } catch (InterruptedException e)
                 {
-                    perro.troll();
+                    System.out.println(e);
                 }
-                System.out.println(contador.getPuntaje());
-            });
-            
-            for (int j = 0; j < tasksInGroup && i < patos; j++, i++)
+            }
+
+            if (contador.getMoridos() > 0)
             {
-                String color = switch (rand.nextInt(3))
-                {
-                    case 0 ->
-                        "azul";
-                    case 1 ->
-                        "negro";
-                    case 2 ->
-                        "rojo";
-                    default ->
-                        "negro";
-                };
-                
-                do
-                {
-                    tmp = rand.nextInt(3);
-                }while(trayectoria == tmp);
-                trayectoria = tmp;
-                Pato pato = new Pato(barrier, color, 120, trayectoria, contador);
-                layeredPane.add(pato, Integer.valueOf(1));
-                executor.submit(pato);
-                System.out.println("Pato : " + (i + 1));
+                perro.atrapar(contador.getMoridos());
+                contador.resetMoridos();
+            } else
+            {
+                perro.troll();
             }
         }
-//        Thread hiloPato1 = new Thread(pato1);
-//        Thread hiloPato2 = new Thread(pato2);
-//        Thread hiloPato3 = new Thread(pato3);
-//        hiloPato1.start();
-//        hiloPato2.start();
-//        hiloPato3.start();
-        executor.shutdown();
-//        while (!executor.isTerminated()){}
+
+        JOptionPane.showMessageDialog(this, "Tu puntaje final es: "
+                + contador.getPuntaje() + "\nPatos: " + contador.getTotalMoridos() + "/" + contador.getTotalPatos());
     }
 }
