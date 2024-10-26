@@ -20,12 +20,11 @@ public class Pato extends JLabel implements Runnable
     private final TrayectoriaVuelo TRAYECTORIA;
     private boolean morido = false;
     private final int delay;
-    private final Contador contador;
-
-    public Pato(String color, int delay, int trayectoria, Contador contador)
+    private final String color;
+    public Pato(String color, int delay, int trayectoria)
     { 
         this.delay = delay;
-        this.contador = contador;
+        this.color = color;
         PATH = "src/sources/patos/" + color + "/";
         TRAYECTORIA = new TrayectoriaVuelo(trayectoria);
 
@@ -59,8 +58,13 @@ public class Pato extends JLabel implements Runnable
 
                 if (morido)
                 {
-                    contador.setMoridos();
-                    contador.setPuntaje(100);
+                    Contador.setPuntaje(switch(color)
+                            {
+                                case "negro" -> 200;
+                                case "rojo" -> 150;
+                                case "azul" -> 100;
+                                default -> 100;
+                            });
                     if (TRAYECTORIA.getCoordenadas().get(0).x < TRAYECTORIA.getCoordenadas().get(TRAYECTORIA.getCoordenadas().size() - 1).x)
                     {
                         imagen = new ImageIcon(PATH + "scaredRight.png");
@@ -70,7 +74,10 @@ public class Pato extends JLabel implements Runnable
                     }
                     setIcon(imagen);
                     setBounds(punto.x, punto.y, imagen.getIconWidth(), imagen.getIconHeight());
-
+                    
+                    Contador.lblContPatos.setText("Patos Cazdos : " + Contador.getTotalMoridos());
+                    Contador.lblPuntaje.setText("Puntaje : " + Contador.getPuntaje());
+                    
                     Thread.sleep(250);
 
                     int a = 1;

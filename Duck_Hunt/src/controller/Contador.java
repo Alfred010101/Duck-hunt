@@ -1,5 +1,7 @@
 package controller;
 
+import javax.swing.JLabel;
+
 /**
  *
  * @author Alfred
@@ -7,48 +9,70 @@ package controller;
 public class Contador
 {
 
-    private int moridos = 0;
-    private int puntaje = 0;
-    private final int totalPatos;
-    private int totalMoridos = 0;
+    /**
+     * Patos muertos por ronda o grupo funciona como bandera
+     */
+    private static int moridos = 0;
+    /**
+     * Puntaje obtenido basa en el numero de patos muertos "negro" +200; "rojo"
+     * +150; "azul" +100;
+     */
+    private static int puntaje = 0;
+    /**
+     * Numero de patos indicados por el usuario
+     */
+    private static int totalPatos;
+    /**
+     * Numero de patos muertos en toda la partida
+     */
+    private static int totalMoridos = 0;
+    /**
+     * Mostrar el puntaje al usuario
+     */
+    public static JLabel lblPuntaje;
+    /**
+     * Mostrar el numero de patos restantes
+     */
+    public static JLabel lblContPatos;
 
-    public Contador(int totalPatos)
+    public static void setTotalPatos(int noPatos)
     {
-        this.totalPatos = totalPatos;
+        totalPatos = noPatos;
     }
 
-    public synchronized void resetMoridos()
-    {
-        moridos = 0;
-    }
-
-    public synchronized void setMoridos()
-    {
-        moridos++;
-        totalMoridos++;
-    }
-
-    public synchronized int getMoridos()
-    {
-        return moridos;
-    }
-
-    public synchronized void setPuntaje(int aumento)
-    {
-        puntaje += aumento;
-    }
-
-    public synchronized int getPuntaje()
-    {
-        return puntaje;
-    }
-
-    public int getTotalPatos()
+    public static int getTotalPatos()
     {
         return totalPatos;
     }
 
-    public int getTotalMoridos()
+    public static synchronized void resetMoridos()
+    {
+        moridos = 0;
+    }
+
+//    public synchronized void setMoridos()
+//    {
+//        moridos++;
+//        totalMoridos++;
+//    }
+    public static synchronized int getMoridos()
+    {
+        return moridos;
+    }
+
+    public static synchronized void setPuntaje(int aumento)
+    {
+        moridos++;
+        totalMoridos++;
+        puntaje += aumento;
+    }
+
+    public static synchronized int getPuntaje()
+    {
+        return puntaje;
+    }
+
+    public static synchronized int getTotalMoridos()
     {
         return totalMoridos;
     }

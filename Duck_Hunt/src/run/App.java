@@ -28,7 +28,7 @@ public class App
                 int noPatos = Integer.parseInt(input);
                 if (noPatos > 0)
                 {
-                    Contador contador = new Contador(noPatos);
+                    Contador.setTotalPatos(noPatos);
                     Random rand = new Random();
                     int trayectoria = -1;
                     int tmp;
@@ -54,9 +54,9 @@ public class App
                         } while (trayectoria == tmp);
                         trayectoria = tmp;
 
-                        patos.add(new Pato(color, 70, trayectoria, contador));
+                        patos.add(new Pato(color, 70, trayectoria));
                     }
-                    ventana = new VentanaPrincipal(patos, contador);
+                    ventana = new VentanaPrincipal(patos);
                     hilo = new Thread(ventana);
                     hilo.start();
                 } else

@@ -1,8 +1,9 @@
 package view;
 
 import controller.Contador;
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Image;
+import java.awt.Font;
 import java.util.Queue;
 import java.util.Random;
 import javax.swing.ImageIcon;
@@ -23,13 +24,11 @@ public class VentanaPrincipal extends JFrame implements Runnable
     private JLayeredPane layeredPane;
 //    private Image imagen;
     private final Queue<Pato> patos;
-    private final Contador contador;
-
+    private JLabel patosRestante;
 //    private final int patos;
-    public VentanaPrincipal(Queue<Pato> patos, Contador contador)
+    public VentanaPrincipal(Queue<Pato> patos)
     {
         this.patos = patos;
-        this.contador = contador;
         setLocation(200, 400);
 //        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,6 +56,13 @@ public class VentanaPrincipal extends JFrame implements Runnable
         lblFondo2.setBounds(0, 0, n2.getIconWidth(), n2.getIconHeight());
         layeredPane.add(lblFondo1, Integer.valueOf(0));
         layeredPane.add(lblFondo2, Integer.valueOf(3));
+        
+        patosRestante = initJLabel(patosRestante, "Patos restantes : " + Contador.getTotalPatos(), 30, 380);
+
+        Contador.lblContPatos = initJLabel(Contador.lblContPatos, "Patos Cazdos : " + Contador.getTotalMoridos(), 30, 400);
+
+        Contador.lblPuntaje = initJLabel(Contador.lblPuntaje, "Puntaje : " + Contador.getPuntaje(), 300, 400);
+
     }
 
     @Override
@@ -91,7 +97,9 @@ public class VentanaPrincipal extends JFrame implements Runnable
                 layeredPane.add(patosEjucutar[i], Integer.valueOf(1));
                 hilosEjucutar[i].start();
             }
-
+            
+            patosRestante.setText("Patos restantes : " + patos.size());
+            
             for (int i = 0; i < noPatosEjecutar; i++)
             {
                 try
@@ -102,11 +110,11 @@ public class VentanaPrincipal extends JFrame implements Runnable
                     System.out.println(e);
                 }
             }
-
-            if (contador.getMoridos() > 0)
+            
+            if (Contador.getMoridos() > 0)
             {
-                perro.atrapar(contador.getMoridos());
-                contador.resetMoridos();
+                perro.atrapar(Contador.getMoridos());
+                Contador.resetMoridos();
             } else
             {
                 perro.troll();
@@ -114,6 +122,17 @@ public class VentanaPrincipal extends JFrame implements Runnable
         }
 
         JOptionPane.showMessageDialog(this, "Tu puntaje final es: "
-                + contador.getPuntaje() + "\nPatos: " + contador.getTotalMoridos() + "/" + contador.getTotalPatos());
+                + Contador.getPuntaje() + "\nPatos: " + Contador.getTotalMoridos() + "/" + Contador.getTotalPatos());
+    }
+    
+    private JLabel initJLabel(JLabel lbl, String txt, int x, int y)
+    {
+        lbl = new JLabel(txt);
+        lbl.setFont(new Font("Arial", Font.BOLD, 20));
+        lbl.setPreferredSize(new Dimension(300, 30));
+        lbl.setBounds(x, y,lbl.getPreferredSize().width, lbl.getPreferredSize().height);
+        lbl.setForeground(Color.BLACK); 
+        layeredPane.add(lbl, Integer.valueOf(4));
+        return lbl;
     }
 }
