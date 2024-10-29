@@ -76,4 +76,6 @@ public class Contador
     {
         return totalMoridos;
     }
+    
+    public static boolean perroRecogiendo = false;
 }

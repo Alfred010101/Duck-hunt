@@ -7,6 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 
 /**
  *
@@ -21,6 +22,8 @@ public class Pato extends JLabel implements Runnable
     private boolean morido = false;
     private final int delay;
     private final String color;
+    private JLayeredPane layeredPane;
+    
     public Pato(String color, int delay, int trayectoria)
     { 
         this.delay = delay;
@@ -93,6 +96,14 @@ public class Pato extends JLabel implements Runnable
                         Thread.sleep(40);
                     }
                     setIcon(null);
+                    Perro p = new Perro(layeredPane);
+                    layeredPane.add(p, Integer.valueOf(2));
+                    if (!Contador.perroRecogiendo)
+                    {
+                        Contador.perroRecogiendo = true;
+                        p.atrapar(1);
+                        Contador.perroRecogiendo = false;
+                    }                    
                     break;
                 }
             }
@@ -100,5 +111,10 @@ public class Pato extends JLabel implements Runnable
         {
             System.out.println(ex);
         }
+    }
+    
+    public void setJLayeredPane(JLayeredPane layeredPane)
+    {
+        this.layeredPane = layeredPane;
     }
 }
