@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.util.Queue;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,6 +28,7 @@ public class VentanaPrincipal extends JFrame implements Runnable
     private final Queue<Pato> patos;
     private JLabel patosRestante;
 //    private final int patos;
+
     public VentanaPrincipal(Queue<Pato> patos)
     {
         this.patos = patos;
@@ -56,7 +59,7 @@ public class VentanaPrincipal extends JFrame implements Runnable
         lblFondo2.setBounds(0, 0, n2.getIconWidth(), n2.getIconHeight());
         layeredPane.add(lblFondo1, Integer.valueOf(0));
         layeredPane.add(lblFondo2, Integer.valueOf(3));
-        
+
         patosRestante = initJLabel(patosRestante, "Patos restantes : " + Contador.getTotalPatos(), 30, 380);
 
         Contador.lblContPatos = initJLabel(Contador.lblContPatos, "Patos Cazdos : " + Contador.getTotalMoridos(), 30, 400);
@@ -73,65 +76,49 @@ public class VentanaPrincipal extends JFrame implements Runnable
 
         perro.intro();
 
-        Random rand = new Random();
+        int totalPatos = patos.size();
+        Thread[] hilosEjucutar = new Thread[totalPatos];
+        Pato[] patosEjucutar = new Pato[totalPatos];
 
-        Thread[] hilosEjucutar = new Thread[2];
-        Pato[] patosEjucutar = new Pato[2];
-        int cont = 0;
-
-        while (!patos.isEmpty())
+        for (int i = 0; i < totalPatos; i++)
         {
-            int noPatosEjecutar;
-            if (patos.size() > 1)
+            patosEjucutar[i] = patos.poll();
+            patosEjucutar[i].setJLayeredPane(layeredPane);
+            hilosEjucutar[i] = new Thread(patosEjucutar[i]);
+            layeredPane.add(patosEjucutar[i], Integer.valueOf(1));
+            hilosEjucutar[i].start();
+            try
             {
-                noPatosEjecutar = ((rand.nextInt(99) + 1) % 2) + 1;
-            } else
+                Thread.sleep(200);
+            } catch (InterruptedException ex)
             {
-                noPatosEjecutar = 1;
+                System.out.println(ex);
             }
+            patosRestante.setText("Patos restantes : " + (Contador.getTotalPatos() - (i +1)) );
+        }
 
-            for (int i = 0; i < noPatosEjecutar; i++, cont++)
+        for (int i = 0; i < totalPatos; i++)
+        {
+            try
             {
-                patosEjucutar[i] = patos.poll();
-                hilosEjucutar[i] = new Thread(patosEjucutar[i]);
-                layeredPane.add(patosEjucutar[i], Integer.valueOf(1));
-                hilosEjucutar[i].start();
-            }
-            
-            patosRestante.setText("Patos restantes : " + patos.size());
-            
-            for (int i = 0; i < noPatosEjecutar; i++)
+                hilosEjucutar[i].join();
+            } catch (InterruptedException e)
             {
-                try
-                {
-                    hilosEjucutar[i].join();
-                } catch (InterruptedException e)
-                {
-                    System.out.println(e);
-                }
-            }
-            
-            if (Contador.getMoridos() > 0)
-            {
-                perro.atrapar(Contador.getMoridos());
-                Contador.resetMoridos();
-            } else
-            {
-                perro.troll();
+                System.out.println(e);
             }
         }
 
         JOptionPane.showMessageDialog(this, "Tu puntaje final es: "
                 + Contador.getPuntaje() + "\nPatos: " + Contador.getTotalMoridos() + "/" + Contador.getTotalPatos());
     }
-    
+
     private JLabel initJLabel(JLabel lbl, String txt, int x, int y)
     {
         lbl = new JLabel(txt);
         lbl.setFont(new Font("Arial", Font.BOLD, 20));
         lbl.setPreferredSize(new Dimension(300, 30));
-        lbl.setBounds(x, y,lbl.getPreferredSize().width, lbl.getPreferredSize().height);
-        lbl.setForeground(Color.BLACK); 
+        lbl.setBounds(x, y, lbl.getPreferredSize().width, lbl.getPreferredSize().height);
+        lbl.setForeground(Color.BLACK);
         layeredPane.add(lbl, Integer.valueOf(4));
         return lbl;
     }
