@@ -50,7 +50,7 @@ public class App
 
                         do
                         {
-                            tmp = rand.nextInt(3);
+                            tmp = rand.nextInt(15);
                         } while (trayectoria == tmp);
                         trayectoria = tmp;
 
